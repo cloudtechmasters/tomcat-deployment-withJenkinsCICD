@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage ('SCM') {
             steps {
-                git 'https://github.com/Naresh240/awsdemoproject.git'
+                git 'https://github.com/cloudtechmasters/awsprojectdemo.git'
             }
         }
         stage ('Build Artifact') {

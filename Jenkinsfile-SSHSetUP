@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    stages {
+        stage ('SCM') {
+            steps {
+                git 'https://github.com/Naresh240/awsdemoproject.git'
+            }
+        }
+        stage ('Build Artifact') {
+            steps {
+                dir('mavewebappdemo') {
+                    sh "mvn clean install"
+                }
+            }
+        }
+        stage ('Deploy to Tomcat') {
+            steps {
+                dir('mavewebappdemo') {
+                    sh "scp target/*.war root@3.236.240.247:/opt/apache-tomcat-8.5.61/webapps/"
+                }
+            }
+        }
+    }
+}

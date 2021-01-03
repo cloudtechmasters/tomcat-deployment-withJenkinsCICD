@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    stages {
+        stage ('SCM') {
+            steps {
+                git 'https://github.com/Naresh240/awsdemoproject.git'
+            }
+        }
+        stage ('Build Artifact') {
+            steps {
+                dir('mavewebappdemo') {
+                    sh "mvn clean install"
+                }
+            }
+        }
+        stage ('Deploy to Tomcat') {
+            steps {
+                dir('mavewebappdemo') {
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'tomcat', 
+                             transfers: [sshTransfer(cleanRemote: false, 
+                             excludes: '',
+                             execCommand: '',
+                             execTimeout: 120000, 
+                             flatten: false, 
+                             makeEmptyDirs: false, 
+                             noDefaultExcludes: false, 
+                             patternSeparator: '[, ]+', 
+                             remoteDirectory: 'apache-tomcat-8.5.61/webapps', 
+                             remoteDirectorySDF: false, 
+                             removePrefix: 'target', 
+                             sourceFiles: 'target/*.war')], 
+                             usePromotionTimestamp: false, 
+                             useWorkspaceInPromotion: false, verbose: false)])
+                }
+            }
+        }
+    }
+}
